@@ -1,0 +1,45 @@
+<configuration debug="false">
+
+
+
+
+  <!-- 2. 定义输出到控制台的日志格式和目标 -->
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- 3. 定义输出到文件的日志格式和目标 -->
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>gateway.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>gateway.%d{yyyy-MM-dd}.log</fileNamePattern>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="accessLog" class="ch.qos.logback.core.FileAppender">
+    <file>access_log.log</file>
+    <encoder>
+      <pattern>%msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="async" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="accessLog" />
+  </appender>
+
+  <logger name="reactor.netty.http.server.AccessLog" level="INFO" additivity="false">
+    <appender-ref ref="async"/>
+  </logger>
+
+  <!-- 1. 定义根日志级别 -->
+  <root level="DEBUG">
+    <appender-ref ref="STDOUT" />
+    <appender-ref ref="FILE" />
+  </root>
+
+</configuration>

@@ -1,0 +1,24 @@
+
+
+management:
+  endpoint:
+    gateway:
+      enabled: true # default value
+  endpoints:
+    web:
+      exposure:
+        include: gateway
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: after_route
+          uri: https://baidu.com
+          predicates:
+            - Path=/baidu/*,/blue/{segment}
+        - id: after_route2
+          uri: https://www.163.com
+          predicates:
+            - Path=/w163/*,/blues/{segment}
+
